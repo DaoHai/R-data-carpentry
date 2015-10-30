@@ -32,3 +32,5 @@ exprmt <- factor(c("treat1", "treat2", "treat1", "treat3", "treat1",
                    "control", "treat1", "treat2", "treat3"), levels=c("treat1","treat2", "treat3","control"))
 table(exprmt)
 barplot(table(exprmt))
+
+library()

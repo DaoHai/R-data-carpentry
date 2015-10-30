@@ -1,6 +1,7 @@
 ---
 title: "sample-markdown"
 output: html_document
+runtime: shiny
 ---
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
@@ -23,6 +24,7 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 library(ggplot2)
 library(magrittr)
 library(dplyr)
+library(shiny)
 
 #load the data from website 
 surveys_raw <- read.csv("http://files.figshare.com/1919744/surveys.csv")
@@ -36,3 +38,12 @@ Plotting things
 ggplot(data=surveys_complete, aes(x=weight, y=hindfoot_length))+geom_point(alpha=0.1, color="blue")
 ```
 
+Plotting things interactively and choose a color
+```{r}
+selectInput("data", "", c("blue","black"))
+renderPlot({
+  #d<-get(input$data)
+  ggplot(data=surveys_complete, aes(x=weight, y=hindfoot_length))+geom_point(alpha=0.1, color=input$data)
+})
+
+```

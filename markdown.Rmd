@@ -1,0 +1,51 @@
+---
+title: "markdown"
+author: "HaiDao"
+date: "30/10/2015"
+output: html_document
+---
+
+---
+title: "dcmarkdown"
+output: html_document
+---
+
+##Introduction to plotting with ggplot2
+```{r warning=FALSE, message=FALSE}
+library(ggplot2)
+
+library(dplyr)
+```
+
+##Step 2: Get the data we need
+```{r}
+surveys_raw <- read.csv('http://files.figshare.com/1919744/surveys.csv')
+```
+
+##Step 3: Clean up the data before plotting
+```{r}
+surveys_complete <- surveys_raw %>% filter(species_id != "")
+```
+
+#Remove empty weights and empty hindfoot lengths
+surveys_complete <- surveys_raw %>% filter(species_id!="") %>%
+                                filter(!is.na(weight)) %>%
+                                filter(!is.na(hindfoot_length))
+
+
+#Remove species with low counts
+#Count number of records per species
+species_counts <- surveys_complete %>%
+                  group_by(species_id) %>%
+                  tally
+
+frequent_species <- species_counts %>%
+                    filter(n>=10) %>%
+                    select(species_id)
+
+surveys_complete <- surveys_complete %>%
+                    filter(species_id %in% frequent_species$species_id)
+
+
+#Step 4: create a basic plot
+plot (x=surveys_complete$weight, y=surveys_complete$hindfoot_length)
